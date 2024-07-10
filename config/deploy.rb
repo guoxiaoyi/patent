@@ -13,6 +13,13 @@ set :deploy_to, "/www/wwwroot/patent"
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
+# Disable assets precompile and backup manifest
+Rake::Task["deploy:assets:backup_manifest"].clear_actions
+Rake::Task["deploy:assets:precompile"].clear_actions
+
+# Alternatively, you can disable it by setting assets roles to an empty array
+set :assets_roles, []
+
 
 # You can configure the Airbrussh format using :format_options.
 # These are the defaults.
