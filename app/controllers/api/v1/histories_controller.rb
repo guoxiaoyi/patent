@@ -1,12 +1,11 @@
-class HistoriesController < ApplicationController
+class Api::V1::HistoriesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_history, only: %i[ show update destroy ]
 
   # GET /histories
   def index
     @histories = History.all
-
-    render json: @histories
+    render_json(message: nil, data: @histories)
   end
 
   # GET /histories/1
