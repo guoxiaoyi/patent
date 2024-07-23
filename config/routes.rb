@@ -5,9 +5,10 @@ Rails.application.routes.draw do
         registrations: 'api/v1/users/registrations',
         sessions: 'api/v1/users/sessions'
       }
-      post 'users/send_verification_code', to: 'api/v1/users/verification_codes#create'
+      post 'users/send_verification_code', to: 'users/verification_codes#create'
     
       resources :histories
+      resources :chats
       resources :ideas do
         post 'stream', on: :collection
       end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_15_143930) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_23_053714) do
   create_table "histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.text "question"
     t.text "answer"
@@ -36,8 +36,67 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_15_143930) do
     t.index ["jti"], name: "index_jwt_denylists_on_jti"
   end
 
+  create_table "store_billing_packages", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "billable_type", null: false
+    t.bigint "billable_id", null: false
+    t.integer "stars"
+    t.datetime "expiration_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["billable_type", "billable_id"], name: "index_store_billing_packages_on_billable"
+  end
+
+  create_table "stores", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.string "domain"
+    t.integer "billingMode", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tenants", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.string "subdomain"
+    t.string "domain"
+    t.integer "billingMode", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["domain"], name: "index_tenants_on_domain", unique: true
+    t.index ["subdomain"], name: "index_tenants_on_subdomain", unique: true
+  end
+
+  create_table "transactions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "store_id", null: false
+    t.integer "amount", null: false
+    t.string "transaction_type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["store_id"], name: "index_transactions_on_store_id"
+    t.index ["user_id"], name: "index_transactions_on_user_id"
+  end
+
+  create_table "user_balances", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "billable_type", null: false
+    t.bigint "billable_id", null: false
+    t.integer "balance"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["billable_type", "billable_id"], name: "index_user_balances_on_billable"
+  end
+
+  create_table "user_billing_packages", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "billable_type", null: false
+    t.bigint "billable_id", null: false
+    t.integer "stars"
+    t.datetime "expiration_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["billable_type", "billable_id"], name: "index_user_billing_packages_on_billable"
+  end
+
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "email", default: ""
+    t.string "phone", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
@@ -56,10 +115,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_15_143930) do
     t.datetime "locked_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "role"
-    t.string "phone"
+    t.bigint "tenant_id", null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
+    t.index ["phone"], name: "index_users_on_phone"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["tenant_id"], name: "index_users_on_tenant_id"
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
@@ -70,4 +130,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_15_143930) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "transactions", "stores"
+  add_foreign_key "transactions", "users"
+  add_foreign_key "users", "tenants"
 end

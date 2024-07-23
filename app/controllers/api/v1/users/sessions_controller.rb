@@ -3,14 +3,14 @@ module Api
 
     class Users::SessionsController < Devise::SessionsController
       respond_to :json
+      
+      before_action :set_tenant
       before_action :check_required_params, only: :create
 
       def create
         user = User.find_by(phone: params[:user][:phone])
         if user&.valid_password?(params[:user][:password])
           token = generate_jwt_token(user)
-          # render_json(true, 'Logged in successfully', :unprocessable_entity)
-          # render json: { message: 'Logged in successfully.', token: token, user: user }, status: :ok
           render_json(message: 'Signed up successfully.', data: { token: token, user: user })
         elsif user && VerificationCode.exists?(phone: params[:user][:phone], code: params[:user][:verification_code])
           VerificationCode.find_by(phone: params[:user][:phone], code: params[:user][:verification_code]).destroy
@@ -34,6 +34,19 @@ module Api
           render_json(message: "缺失必要参数", data: missing_params, code: 422, status: :ok)
         end
       end
+
+      def set_tenant
+        subdomain = request.subdomain
+        domain = request.domain
+        if subdomain.present? && subdomain != 'www'
+          set_current_tenant(Tenant.find_by(subdomain: subdomain))
+        elsif domain.present?
+          set_current_tenant(Tenant.find_by(domain: domain))
+        else
+          set_current_tenant(Tenant.find_by(domain: request.host))
+        end
+      end
+    
     end
   end
 end

@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  billable: one
+  billable_type: Billable
+  stars: 1
+  expiration_date: 2024-07-22 10:42:41
+
+two:
+  billable: two
+  billable_type: Billable
+  stars: 1
+  expiration_date: 2024-07-22 10:42:41

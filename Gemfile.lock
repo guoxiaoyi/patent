@@ -66,6 +66,8 @@ GEM
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
+    acts_as_tenant (1.0.1)
+      rails (>= 6.0)
     airbrussh (1.5.2)
       sshkit (>= 1.6.1, != 1.7.0)
     base64 (0.2.0)
@@ -103,9 +105,9 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
-    devise-jwt (0.11.0)
+    devise-jwt (0.12.1)
       devise (~> 4.0)
-      warden-jwt_auth (~> 0.8)
+      warden-jwt_auth (~> 0.10)
     dry-auto_inject (1.0.1)
       dry-core (~> 1.0)
       zeitwerk (~> 2.6)
@@ -168,8 +170,6 @@ GEM
     nio4r (2.7.3)
     nokogiri (1.16.6-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.16.6-x86_64-linux)
-      racc (~> 1.4)
     orm_adapter (0.5.0)
     psych (5.1.2)
       stringio
@@ -230,7 +230,7 @@ GEM
       concurrent-ruby (~> 1.0)
     warden (1.2.9)
       rack (>= 2.0.9)
-    warden-jwt_auth (0.9.0)
+    warden-jwt_auth (0.10.0)
       dry-auto_inject (>= 0.8, < 2)
       dry-configurable (>= 0.13, < 2)
       jwt (~> 2.1)
@@ -242,9 +242,9 @@ GEM
 
 PLATFORMS
   arm64-darwin-21
-  x86_64-linux
 
 DEPENDENCIES
+  acts_as_tenant
   bootsnap
   capistrano (~> 3.14)
   capistrano-bundler (~> 1.6)

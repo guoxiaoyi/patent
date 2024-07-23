@@ -1,8 +1,9 @@
-class Api::V1::IdeasController < ApplicationController
+class Api::V1::ChatsController < ApplicationController
   include ActionController::Live
 
   before_action :authenticate_user!
   before_action :set_idea, only: %i[ show update destroy ]
+
   def create
     uri = URI('https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation')
     http = Net::HTTP.new(uri.host, uri.port)
@@ -19,8 +20,26 @@ class Api::V1::IdeasController < ApplicationController
       model: 'qwen-turbo',
       input: {
         messages: [
-          { role: 'system', content: '语言：中文. 你是一名擅长使用TRIZ方法论来发掘专利创新点的发明家。你会从矛盾分析、系统分析、资源分析、功能分析、物质场分析。下面，我将说明我的需求，你要通过TRIZ方法为我挖掘数量多，而且又可行性的创新点。并对每种创新点提供详细一点的方案说明。'},
-          { role: 'user', content: '食谱'}
+          {
+            role: 'system',
+            content: '你是一个专业的写专利助手'
+          },
+          {
+            role: 'user',
+            content: '你还记得我之前 问的问题吗？'
+          },
+          {
+            role: 'assistant',
+            content: '是的，我记得。请告诉我你之前问的问题，我会尽力为你提供答案或解答。'
+          },
+          {
+            role: 'user',
+            content: '所以，我之前问你什么问题了？'
+          },
+          {
+            role: 'assistant',
+            content: '对不起，由于我是一个基于模型的聊天助手，我并没有记忆功能，无法回忆起具体的个人对话历史。但我可以根据当前的话题来提供帮助。如果你能再次告诉我你的问题，我会尽力回答。'
+          }
         ]
       },
       parameters: {
@@ -37,17 +56,16 @@ class Api::V1::IdeasController < ApplicationController
         chunk.force_encoding('UTF-8')
         parser.feed(chunk) do |_type, data|
           # 在这里可以将chunk通过某种方式传递给前端，比如通过ActionCable或者SSE
-          ActionCable.server.broadcast('idea_channel', data)
+          ActionCable.server.broadcast('chat_channel', data)
         end
         # response_body += convert_to_json(chunk)
       end
     end
-  
-    render json: { message: 'Signed up successfully.' }
+    render_json(message: 'Signed up successfully.', data: { })
   end
 
   private
-  def history_params
-    params.require(:idea).permit(:question, :answer)
+  def chat_params
+    params.require(:chat).permit(:question)
   end
 end

@@ -20,7 +20,7 @@ gem 'devise'
 gem 'devise-jwt'
 gem 'kramdown'
 gem 'event_stream_parser'
-
+gem 'acts_as_tenant'
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
