@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_23_053714) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_24_063508) do
   create_table "histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.text "question"
     t.text "answer"
@@ -46,33 +46,44 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_23_053714) do
     t.index ["billable_type", "billable_id"], name: "index_store_billing_packages_on_billable"
   end
 
-  create_table "stores", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "name"
-    t.string "domain"
-    t.integer "billingMode", default: 0
+  create_table "tenant_managers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_tenant_managers_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_tenant_managers_on_reset_password_token", unique: true
   end
 
   create_table "tenants", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
     t.string "name"
     t.string "subdomain"
     t.string "domain"
     t.integer "billingMode", default: 0
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["domain"], name: "index_tenants_on_domain", unique: true
+    t.index ["email"], name: "index_tenants_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_tenants_on_reset_password_token", unique: true
     t.index ["subdomain"], name: "index_tenants_on_subdomain", unique: true
   end
 
   create_table "transactions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.bigint "store_id", null: false
+    t.bigint "tenant_id", null: false
     t.integer "amount", null: false
     t.string "transaction_type", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["store_id"], name: "index_transactions_on_store_id"
+    t.index ["tenant_id"], name: "index_transactions_on_tenant_id"
     t.index ["user_id"], name: "index_transactions_on_user_id"
   end
 
@@ -130,7 +141,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_23_053714) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "transactions", "stores"
+  add_foreign_key "transactions", "tenants"
   add_foreign_key "transactions", "users"
   add_foreign_key "users", "tenants"
 end

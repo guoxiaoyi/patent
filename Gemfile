@@ -16,11 +16,17 @@ gem "puma", "~> 5.0"
 gem "jbuilder"
 
 gem 'httparty'
+
+# 登录
 gem 'devise'
 gem 'devise-jwt'
-gem 'kramdown'
+
+# 解析流式返回数据
 gem 'event_stream_parser'
+# 多租户
 gem 'acts_as_tenant'
+# 配置文件
+gem 'figaro'
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"

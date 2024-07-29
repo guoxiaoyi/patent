@@ -1,6 +1,5 @@
 module Api
   module V1
-
     class Users::SessionsController < Devise::SessionsController
       respond_to :json
       
@@ -46,7 +45,6 @@ module Api
           set_current_tenant(Tenant.find_by(domain: request.host))
         end
       end
-    
     end
   end
 end

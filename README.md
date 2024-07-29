@@ -23,3 +23,7 @@ Things you may want to cover:
 
 * ...
 # patent
+# TODO
+* 创建租户
+  * 设置用户名、密码、域名、功能、过期时间
+  * 租户登录

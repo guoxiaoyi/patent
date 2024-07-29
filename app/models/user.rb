@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   acts_as_tenant(:tenant)
-
+  belongs_to :tenant
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -9,5 +9,5 @@ class User < ApplicationRecord
          authentication_keys: [:phone]
 
   validates_uniqueness_of :phone, scope: :tenant_id
-  
+
 end
