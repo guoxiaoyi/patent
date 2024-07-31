@@ -10,7 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_24_063508) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_30_144135) do
+  create_table "features", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.integer "cost"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.text "question"
     t.text "answer"
@@ -36,79 +43,93 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_24_063508) do
     t.index ["jti"], name: "index_jwt_denylists_on_jti"
   end
 
-  create_table "store_billing_packages", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "billable_type", null: false
-    t.bigint "billable_id", null: false
-    t.integer "stars"
-    t.datetime "expiration_date"
+  create_table "promotions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.integer "bonus_amount"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["billable_type", "billable_id"], name: "index_store_billing_packages_on_billable"
+  end
+
+  create_table "recharge_types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.decimal "price", precision: 10
+    t.integer "amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "resource_pack_types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.decimal "price", precision: 10
+    t.integer "amount"
+    t.integer "valid_days"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "resource_packs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "owner_type", null: false
+    t.bigint "owner_id", null: false
+    t.bigint "resource_pack_type_id", null: false
+    t.integer "amount"
+    t.integer "status", default: 0, null: false
+    t.datetime "valid_from", null: false
+    t.datetime "valid_to", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["owner_type", "owner_id"], name: "index_resource_packs_on_owner"
+    t.index ["resource_pack_type_id"], name: "index_resource_packs_on_resource_pack_type_id"
   end
 
   create_table "tenant_managers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "email", default: "", null: false
+    t.string "phone", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["email"], name: "index_tenant_managers_on_email", unique: true
+    t.index ["phone"], name: "index_tenant_managers_on_phone", unique: true
     t.index ["reset_password_token"], name: "index_tenant_managers_on_reset_password_token", unique: true
   end
 
   create_table "tenants", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "email", default: "", null: false
+    t.string "phone", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "name"
     t.string "subdomain"
     t.string "domain"
-    t.integer "billingMode", default: 0
+    t.integer "billing_mode", default: 0
+    t.integer "balance", default: 0
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["domain"], name: "index_tenants_on_domain", unique: true
-    t.index ["email"], name: "index_tenants_on_email", unique: true
+    t.index ["phone"], name: "index_tenants_on_phone", unique: true
     t.index ["reset_password_token"], name: "index_tenants_on_reset_password_token", unique: true
     t.index ["subdomain"], name: "index_tenants_on_subdomain", unique: true
   end
 
   create_table "transactions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "tenant_id", null: false
-    t.integer "amount", null: false
-    t.string "transaction_type", null: false
+    t.string "account_type"
+    t.integer "account_id"
+    t.integer "amount"
+    t.integer "transaction_type"
+    t.string "transactionable_type"
+    t.integer "transactionable_id"
+    t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["tenant_id"], name: "index_transactions_on_tenant_id"
-    t.index ["user_id"], name: "index_transactions_on_user_id"
-  end
-
-  create_table "user_balances", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "billable_type", null: false
-    t.bigint "billable_id", null: false
-    t.integer "balance"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["billable_type", "billable_id"], name: "index_user_balances_on_billable"
-  end
-
-  create_table "user_billing_packages", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "billable_type", null: false
-    t.bigint "billable_id", null: false
-    t.integer "stars"
-    t.datetime "expiration_date"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["billable_type", "billable_id"], name: "index_user_billing_packages_on_billable"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "phone", default: "", null: false
     t.string "encrypted_password", default: "", null: false
+    t.integer "balance", default: 0, null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -141,7 +162,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_24_063508) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "transactions", "tenants"
-  add_foreign_key "transactions", "users"
+  add_foreign_key "resource_packs", "resource_pack_types"
   add_foreign_key "users", "tenants"
 end

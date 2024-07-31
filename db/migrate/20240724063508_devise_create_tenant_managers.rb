@@ -4,7 +4,7 @@ class DeviseCreateTenantManagers < ActiveRecord::Migration[7.0]
   def change
     create_table :tenant_managers do |t|
       ## Database authenticatable
-      t.string :email,              null: false, default: ""
+      t.string :phone,              null: false, default: ""
       t.string :encrypted_password, null: false, default: ""
 
       ## Recoverable
@@ -36,7 +36,7 @@ class DeviseCreateTenantManagers < ActiveRecord::Migration[7.0]
       t.timestamps null: false
     end
 
-    add_index :tenant_managers, :email,                unique: true
+    add_index :tenant_managers, :phone,                unique: true
     add_index :tenant_managers, :reset_password_token, unique: true
     # add_index :tenant_managers, :confirmation_token,   unique: true
     # add_index :tenant_managers, :unlock_token,         unique: true

@@ -1,6 +1,6 @@
 require "test_helper"
 
-class UserBillingPackageTest < ActiveSupport::TestCase
+class RechargeTypeTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

@@ -4,13 +4,14 @@ class DeviseCreateTenants < ActiveRecord::Migration[7.0]
   def change
     create_table :tenants do |t|
       ## Database authenticatable
-      t.string :email,              null: false, default: ""
+      t.string :phone,              null: false, default: ""
       t.string :encrypted_password, null: false, default: ""
 
       t.string :name
       t.string :subdomain
       t.string :domain
-      t.integer :billingMode, default: 0
+      t.integer :billing_mode, default: 0
+      t.integer :balance, default: 0
 
       ## Recoverable
       t.string   :reset_password_token
@@ -41,7 +42,7 @@ class DeviseCreateTenants < ActiveRecord::Migration[7.0]
       t.timestamps null: false
     end
 
-    add_index :tenants, :email,                unique: true
+    add_index :tenants, :phone,                unique: true
     add_index :tenants, :reset_password_token, unique: true
     add_index :tenants, :subdomain, unique: true
     add_index :tenants, :domain, unique: true

@@ -1,6 +1,6 @@
 require "test_helper"
 
-class StoreBillingPackageTest < ActiveSupport::TestCase
+class ResourcePackTypeTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

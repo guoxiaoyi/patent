@@ -28,6 +28,8 @@ gem 'acts_as_tenant'
 # 配置文件
 gem 'figaro'
 
+gem 'hirb'
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 
