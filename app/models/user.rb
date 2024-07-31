@@ -18,7 +18,7 @@ class User < ApplicationRecord
 
   # 用户使用功能
   def use_feature(feature)
-    target = tenant.billing_mode.shared? ? tenant : self
+    target = tenant.shared? ? tenant : self
     if target.sufficient_balance?(feature.cost)
       target.deduct_amount(feature)
     else
