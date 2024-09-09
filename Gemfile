@@ -27,9 +27,14 @@ gem 'event_stream_parser'
 gem 'acts_as_tenant'
 # 配置文件
 gem 'figaro'
-
+# 美化表格
 gem 'hirb'
+# 分页
+gem 'kaminari'
 
+gem 'jbuilder'
+# 软删除
+gem 'acts_as_paranoid'
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 

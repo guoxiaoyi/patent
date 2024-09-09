@@ -18,6 +18,8 @@ Rails.application.routes.draw do
 
       namespace :users do
         resources :verification_codes, only: [:create]
+        resources :customers, only: [:index, :create]
+        resources :projects, only: [:index, :create, :update, :destroy]
       end
       # post 'users/', to: 'users/verification_codes#create'
     
@@ -37,6 +39,7 @@ Rails.application.routes.draw do
 
       namespace :tenant_managers do
         resources :tenants
+        resources :transactions, only: [:index]
         resources :dashboard, only: [:index]
       end
     end

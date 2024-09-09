@@ -6,6 +6,14 @@ module Rechargeable
   end
 
   # 充值或购买资源包
+  # 根据提供的类型执行相应的操作，可以是购买资源包或充值
+  # 
+  # 参数:
+  # - type: 操作类型，可以是ResourcePackType（资源包类型）或RechargeType（充值类型）
+  # 
+  # 返回值:
+  # - 如果操作成功，返回true
+  # - 如果类型无效，将错误信息添加到errors集合中，并返回false
   def purchase(type)
     if type.is_a?(ResourcePackType)
       purchase_resource_pack(type)

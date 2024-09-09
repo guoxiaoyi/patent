@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_30_144135) do
+ActiveRecord::Schema[7.0].define(version: 2024_09_03_143803) do
+  create_table "customers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.bigint "tenant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tenant_id"], name: "index_customers_on_tenant_id"
+  end
+
   create_table "features", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.integer "cost"
@@ -41,6 +49,18 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_30_144135) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["jti"], name: "index_jwt_denylists_on_jti"
+  end
+
+  create_table "projects", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.bigint "customer_id"
+    t.bigint "tenant_id", null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_projects_on_customer_id"
+    t.index ["deleted_at"], name: "index_projects_on_deleted_at"
+    t.index ["tenant_id"], name: "index_projects_on_tenant_id"
   end
 
   create_table "promotions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -162,6 +182,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_30_144135) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "customers", "tenants"
+  add_foreign_key "projects", "customers"
+  add_foreign_key "projects", "tenants"
   add_foreign_key "resource_packs", "resource_pack_types"
   add_foreign_key "users", "tenants"
 end

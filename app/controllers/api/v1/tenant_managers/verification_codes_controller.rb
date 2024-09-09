@@ -1,7 +1,6 @@
 module Api
   module V1
-    class Users::VerificationCodesController < ActionController::API
-      include ResponseConcern
+    class TenantManagers::VerificationCodesController < ActionController::API
       def create
         verification_code = VerificationCode.find_or_initialize_by(phone: params[:phone])
         verification_code.save

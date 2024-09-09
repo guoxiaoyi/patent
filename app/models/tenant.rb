@@ -6,6 +6,8 @@ class Tenant < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
 
   has_many :users
+  has_many :projects
+  has_many :customers
   has_many :transactions, as: :account, dependent: :destroy
 
   enum billing_mode: { shared: 0, isolated: 1 }

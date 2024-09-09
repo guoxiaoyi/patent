@@ -10,12 +10,12 @@ tenant = Tenant.create!(
   phone: '13942615730',
   name: "Example Tenant",
   subdomain: "example",
-  domain: "example.com",
+  domain: "localhost",
   password: "password",
   password_confirmation: "password"
 )
 User.create!(
-  phone: "1234567890",
+  phone: "13942615730",
   password: "password",
   password_confirmation: "password",
   tenant: tenant

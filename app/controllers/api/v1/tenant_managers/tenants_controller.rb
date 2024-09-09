@@ -4,8 +4,11 @@ class Api::V1::TenantManagers::TenantsController < Api::V1::TenantManagers::Appl
   respond_to :json
 
   def index
-    @tenants = Tenant.all
-    render_json(message: nil, data: @tenants)
+    @tenants = Tenant.all.page(params[:page]).per(params[:per_page] || 10)
+    render_json(message: nil, data: { 
+      content: @tenants,
+      pagination: pagination_meta(@tenants)
+    })
   end
 
   def show

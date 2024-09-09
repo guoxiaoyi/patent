@@ -6,8 +6,9 @@ module Api
       respond_to :json
 
       def create
-        user = TenantManager.find_by(email: params[:tenant_manager][:email])
-        if user&.valid_password?(params[:tenant_manager][:password])
+        user = TenantManager.find_by(phone: params[:tenant_manager][:phone])
+        if user && VerificationCode.exists?(phone: params[:tenant_manager][:phone], code: params[:tenant_manager][:code])
+          VerificationCode.find_by(phone: params[:tenant_manager][:phone], code: params[:tenant_manager][:code]).destroy
           token = generate_jwt_token(user)
           render_json(message: 'Signed up successfully.', data: { token: token, user: user })
         else

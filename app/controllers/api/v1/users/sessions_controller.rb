@@ -14,7 +14,7 @@ module Api
         elsif user && VerificationCode.exists?(phone: params[:user][:phone], code: params[:user][:verification_code])
           VerificationCode.find_by(phone: params[:user][:phone], code: params[:user][:verification_code]).destroy
           token = generate_jwt_token(user)
-          render json: { message: 'Logged in with verification code successfully.', token: token, user: user }, status: :ok
+          render_json(message: 'Signed up successfully.', data: { token: token, user: user })
         else
           render json: { message: 'Invalid login credentials or verification code.' }, status: :unauthorized
         end
@@ -26,7 +26,7 @@ module Api
         Warden::JWTAuth::UserEncoder.new.call(user, :user, nil).first
       end
       def check_required_params
-        required_params = [:phone, :password] # Add all required parameters here
+        required_params = [:phone, :verification_code] # Add all required parameters here
         missing_params = required_params.select { |param| params[:user][param].blank? }
 
         if missing_params.any?
