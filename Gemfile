@@ -32,7 +32,6 @@ gem 'hirb'
 # 分页
 gem 'kaminari'
 
-gem 'jbuilder'
 # 软删除
 gem 'acts_as_paranoid'
 # Use Redis adapter to run Action Cable in production
