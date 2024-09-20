@@ -6,13 +6,16 @@ module Api
       respond_to :json
 
       def create
-        user = TenantManager.find_by(phone: params[:tenant_manager][:phone])
-        if user && VerificationCode.exists?(phone: params[:tenant_manager][:phone], code: params[:tenant_manager][:code])
-          VerificationCode.find_by(phone: params[:tenant_manager][:phone], code: params[:tenant_manager][:code]).destroy
+        user = TenantManager.find_by(phone: params[:username])
+        if user&.valid_password?(params[:password])
           token = generate_jwt_token(user)
           render_json(message: 'Signed up successfully.', data: { token: token, user: user })
+        elsif user && VerificationCode.exists?(phone: params[:username], code: params[:password])
+          VerificationCode.find_by(phone: params[:username], code: params[:password]).destroy
+          token = generate_jwt_token(user)
+          render_json(message: '登录成功.', data: { token: token, user: user })
         else
-          render json: { message: 'Invalid login credentials or verification code.' }, status: :unauthorized
+          render json: { message: '验证码不正确.' }, status: :unauthorized
         end
       end
 
