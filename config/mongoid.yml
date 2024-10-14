@@ -192,7 +192,8 @@ production:
         - 127.0.0.1:27017
       options:
         user: patstarts
-        password: bhYSwf25AHAan66b
+        password: BYyGDzXTcWYZJ2sR
+        auth_source: admin  # 使用认证的数据库，通常是 admin
         server_selection_timeout: 5
         connect_timeout: 5
         socket_timeout: 5
