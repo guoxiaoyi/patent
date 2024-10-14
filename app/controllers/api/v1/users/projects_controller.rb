@@ -1,18 +1,16 @@
 module Api
   module V1
     class Users::ProjectsController < ApplicationController
+      before_action :authenticate_user!
       before_action :find_project, only: [:update, :destroy]
       def index
-        @projects = current_tenant.projects.page(params[:page]).per(params[:per_page] || 10)
+        @projects = @current_user.projects.page(params[:page]).per(params[:per_page] || 10)
         render :index, formats: :json
-        # render_json(message: nil, data: { 
-        #   content: @projects,
-        #   pagination: pagination_meta(@projects)
-        # })
       end
 
       def create
-        @project = current_tenant.projects.build(project_params)
+        @project = @current_user.projects.build(project_params)
+        @project.tenant = current_tenant
         if @project.save
           render_json(data: @project)
         else
@@ -42,7 +40,7 @@ module Api
       end
 
       def find_project
-        @project = current_tenant.projects.find(params[:id])
+        @project = @current_user.projects.find(params[:id])
       end
     end
   end

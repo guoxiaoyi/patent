@@ -11,6 +11,7 @@ class DeviseCreateTenants < ActiveRecord::Migration[7.0]
       t.string :subdomain
       t.string :domain
       t.integer :billing_mode, default: 0
+      t.integer :mode, default: 0
       t.integer :balance, default: 0
 
       ## Recoverable
@@ -44,8 +45,8 @@ class DeviseCreateTenants < ActiveRecord::Migration[7.0]
 
     add_index :tenants, :phone,                unique: true
     add_index :tenants, :reset_password_token, unique: true
-    add_index :tenants, :subdomain, unique: true
-    add_index :tenants, :domain, unique: true
+    add_index :tenants, :subdomain
+    add_index :tenants, :domain
 
     # add_index :tenants, :confirmation_token,   unique: true
     # add_index :tenants, :unlock_token,         unique: true

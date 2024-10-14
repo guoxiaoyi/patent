@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_09_03_143803) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_13_144422) do
   create_table "customers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.bigint "tenant_id", null: false
@@ -21,6 +21,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_03_143803) do
 
   create_table "features", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
+    t.string "feature_key"
     t.integer "cost"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -51,16 +52,34 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_03_143803) do
     t.index ["jti"], name: "index_jwt_denylists_on_jti"
   end
 
+  create_table "payments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "tenant_id", null: false
+    t.decimal "amount", precision: 10, scale: 2
+    t.string "code"
+    t.string "status"
+    t.integer "transaction_id"
+    t.string "paymentable_type", null: false
+    t.bigint "paymentable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["paymentable_type", "paymentable_id"], name: "index_payments_on_paymentable"
+    t.index ["tenant_id"], name: "index_payments_on_tenant_id"
+    t.index ["user_id"], name: "index_payments_on_user_id"
+  end
+
   create_table "projects", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.bigint "customer_id"
     t.bigint "tenant_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["customer_id"], name: "index_projects_on_customer_id"
     t.index ["deleted_at"], name: "index_projects_on_deleted_at"
     t.index ["tenant_id"], name: "index_projects_on_tenant_id"
+    t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
   create_table "promotions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -74,19 +93,24 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_03_143803) do
 
   create_table "recharge_types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
-    t.decimal "price", precision: 10
+    t.decimal "price", precision: 10, scale: 2
+    t.decimal "discount", precision: 10, scale: 2
     t.integer "amount"
+    t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "resource_pack_types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
-    t.decimal "price", precision: 10
+    t.decimal "price", precision: 10, scale: 2
+    t.decimal "discount", precision: 10, scale: 2
     t.integer "amount"
     t.integer "valid_days"
+    t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["deleted_at"], name: "index_resource_pack_types_on_deleted_at"
   end
 
   create_table "resource_packs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -122,16 +146,17 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_03_143803) do
     t.string "subdomain"
     t.string "domain"
     t.integer "billing_mode", default: 0
+    t.integer "mode", default: 0
     t.integer "balance", default: 0
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["domain"], name: "index_tenants_on_domain", unique: true
+    t.index ["domain"], name: "index_tenants_on_domain"
     t.index ["phone"], name: "index_tenants_on_phone", unique: true
     t.index ["reset_password_token"], name: "index_tenants_on_reset_password_token", unique: true
-    t.index ["subdomain"], name: "index_tenants_on_subdomain", unique: true
+    t.index ["subdomain"], name: "index_tenants_on_subdomain"
   end
 
   create_table "transactions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -183,8 +208,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_03_143803) do
   end
 
   add_foreign_key "customers", "tenants"
+  add_foreign_key "payments", "tenants"
+  add_foreign_key "payments", "users"
   add_foreign_key "projects", "customers"
   add_foreign_key "projects", "tenants"
+  add_foreign_key "projects", "users"
   add_foreign_key "resource_packs", "resource_pack_types"
   add_foreign_key "users", "tenants"
 end

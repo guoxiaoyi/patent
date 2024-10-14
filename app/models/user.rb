@@ -5,6 +5,8 @@ class User < ApplicationRecord
   acts_as_tenant(:tenant)
 
   belongs_to :tenant
+  has_many :projects
+  has_many :payments, dependent: :destroy
   has_many :transactions, as: :account, dependent: :destroy
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable

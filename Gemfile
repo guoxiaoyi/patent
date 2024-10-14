@@ -31,9 +31,13 @@ gem 'figaro'
 gem 'hirb'
 # 分页
 gem 'kaminari'
-
 # 软删除
 gem 'acts_as_paranoid'
+# mongoDB
+gem 'mongoid', '~> 7.0'
+
+gem 'rails-erd'
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 

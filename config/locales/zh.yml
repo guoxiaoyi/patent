@@ -1,0 +1,45 @@
+zh:
+  activerecord:
+    models:
+      tenant: "租户"
+    attributes:
+      tenant:
+        name: "名称"
+        password: "密码"
+        domain: "域名"
+        subdomain: "子域名"
+      resource_pack_type:
+        name: "名称"
+        price: "价格"
+        discount: "折扣"
+        amount: "星币数量"
+        valid_days: "有效天数"
+    errors:
+      models:
+        tenant:
+          attributes:
+            name:
+              blank: "名称不能为空"
+            password:
+              confirmation: "密码和确认密码不匹配"
+            domain:
+              blank: "不能为空"
+              taken: "该域名已经被使用"
+            subdomain:
+              blank: "不能为空"
+          messages:
+            unique: "此值已存在"
+        resource_pack_type:
+          attributes:
+            name:
+              blank: "不能为空"
+            price:
+              blank: "不能为空"
+            discount:
+              blank: "不能为空"
+            amount:
+              blank: "不能为空"
+            valid_days:
+              blank: "不能为空"
+      messages:
+        record_invalid: "记录验证失败：%{errors}"

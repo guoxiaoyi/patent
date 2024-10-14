@@ -41,19 +41,20 @@ module Rechargeable
       amount: resource_pack_type.amount,
       transaction_type: :resource_pack_purchase,
       transactionable: resource_pack,
-      description: "Purchased resource pack #{resource_pack_type.name}"
+      description: "够买资源包: #{resource_pack_type.name}"
     )
   end
 
   # 充值
   def recharge(recharge_type)
-    Transaction.create(
+    txn = Transaction.create(
       account: self,
       amount: recharge_type.amount,
       transaction_type: :recharge,
       transactionable: recharge_type,
-      description: "Recharged #{recharge_type.amount} stars"
+      description: "充值 #{recharge_type.amount} 星币"
     )
     update(balance: balance + recharge_type.amount)
+    txn
   end
 end

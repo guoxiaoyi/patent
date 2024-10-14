@@ -19,15 +19,18 @@ class Api::V1::TenantManagers::TenantsController < Api::V1::TenantManagers::Appl
     @tenant = Tenant.new(tenant_params)
     
     if @tenant.save
-      render json: @tenant, status: :created
+      render_json(data: @tenant, status: :created)
     else
-      render json: { errors: @tenant.errors }, status: :unprocessable_entity
+      render_json( message: @tenant.errors.full_messages.join(','), status: :unprocessable_entity, code: 1)
     end
   end
 
   def update
-    flash[:notice] = 'Api::V1::TenantManagers::Tenant was successfully updated.' if @tenant.update(tenant_params)
-    respond_with(@tenant)
+    if @tenant.update(tenant_params)
+      render_json(data: @tenant)
+    else
+      render_json(message: @tenant.errors.full_messages.join(','), status: :unprocessable_entity, code: 1)
+    end
   end
 
   def destroy
@@ -41,6 +44,6 @@ class Api::V1::TenantManagers::TenantsController < Api::V1::TenantManagers::Appl
     end
 
     def tenant_params
-      params.require(:tenant).permit(:email, :password, :password_confirmation, :domain, :subdomain, :name)
+      params.require(:tenant).permit(:phone, :domain, :subdomain, :name, :mode, :billing_mode)
     end
 end

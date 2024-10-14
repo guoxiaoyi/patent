@@ -4,6 +4,7 @@ class CreateProjects < ActiveRecord::Migration[7.0]
       t.string :name
       t.references :customer, null: true, foreign_key: true
       t.references :tenant, null: false, foreign_key: true
+      t.references :user, null: false, foreign_key: true
       t.datetime :deleted_at
       t.timestamps
     end

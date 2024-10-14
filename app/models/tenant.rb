@@ -4,6 +4,7 @@ class Tenant < ApplicationRecord
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  # mode 0: 企业, 1: 租户
 
   has_many :users
   has_many :projects
@@ -11,7 +12,8 @@ class Tenant < ApplicationRecord
   has_many :transactions, as: :account, dependent: :destroy
 
   enum billing_mode: { shared: 0, isolated: 1 }
-
+  enum mode: { company: 0, tenant: 1 }
+  
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable,
          :jwt_authenticatable, jwt_revocation_strategy: Devise::JWT::RevocationStrategies::Null,
@@ -19,8 +21,8 @@ class Tenant < ApplicationRecord
 
   validates :name, presence: true
   validates :password, confirmation: true
-  validates :subdomain, uniqueness: true, allow_blank: true
-  validates :domain, uniqueness: true, allow_blank: true
+  validates :domain, uniqueness: { scope: :subdomain, case_sensitive: false }, presence: true, if: :subdomain?
+  validates :subdomain, presence: true, if: :tenant?
   validate :subdomain_or_domain_present
 
   private

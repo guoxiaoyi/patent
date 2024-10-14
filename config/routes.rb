@@ -20,6 +20,12 @@ Rails.application.routes.draw do
         resources :verification_codes, only: [:create]
         resources :customers, only: [:index, :create]
         resources :projects, only: [:index, :create, :update, :destroy]
+        resources :recharge_types, only: [:index]
+        resources :resource_pack_types, only: [:index]
+        resources :payments, only: [:create] do
+          post :notify, on: :collection
+        end
+
       end
       # post 'users/', to: 'users/verification_codes#create'
     
@@ -38,7 +44,10 @@ Rails.application.routes.draw do
       end
 
       namespace :tenant_managers do
+        resource :user
         resources :tenants
+        resources :recharge_types, only: [:index, :create, :destroy]
+        resources :resource_pack_types, only: [:index, :create, :destroy]
         resources :transactions, only: [:index]
         resources :dashboard, only: [:index]
       end

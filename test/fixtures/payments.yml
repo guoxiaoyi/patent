@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  tenant: one
+  order_number: MyString
+  status: MyString
+  transaction_id: 1
+  paymentable: one
+  paymentable_type: Paymentable
+
+two:
+  user: two
+  tenant: two
+  order_number: MyString
+  status: MyString
+  transaction_id: 1
+  paymentable: two
+  paymentable_type: Paymentable
