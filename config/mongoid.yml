@@ -193,7 +193,6 @@ production:
       options:
         user: patstarts
         password: bhYSwf25AHAan66b
-        auth_source: admin  # 使用认证的数据库，通常是 admin
         server_selection_timeout: 5
         connect_timeout: 5
         socket_timeout: 5
