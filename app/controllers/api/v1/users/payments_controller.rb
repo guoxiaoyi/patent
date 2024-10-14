@@ -5,7 +5,7 @@ module Api
       before_action :find_paymentable, only: [:create]
       def create
         @payment = @current_user.payments.build(tenant: current_tenant, paymentable: @paymentable, amount: @paymentable.discount)
-        
+        base_url = Rails.env.production? ? request.base_url : "https://txg-ski.club"
         if @payment.save
           options = {
             description: @paymentable.name,
@@ -21,7 +21,7 @@ module Api
               method: "POST", 
               url: '/v3/pay/transactions/native', 
               body: options, 
-              notify_url: "https://txg-ski.club#{Rails.application.routes.url_helpers.notify_api_v1_users_payments_url(only_path: true)}"
+              notify_url: "#{base_url}#{Rails.application.routes.url_helpers.notify_api_v1_users_payments_url(only_path: true)}"
             )
 
             @wechat_pay_response = wechat_pay.native

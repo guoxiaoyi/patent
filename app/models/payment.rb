@@ -27,7 +27,6 @@ class Payment < ApplicationRecord
     if status == 'success' && status_previously_was == 'pending'
       # 执行购买操作
       txn = user.purchase(paymentable)
-      puts txn
       # 更新 transaction_id 为购买操作返回的 ID
       update_column(:transaction_id, txn.id)
     end
