@@ -187,13 +187,13 @@ test:
 production:
   clients:
     default:
-      database: patstarts
+      database: parstarts
       hosts:
         - 127.0.0.1:27017
       options:
-        user: patstarts
+        user: parstarts
         password: BYyGDzXTcWYZJ2sR
-        auth_source: patstarts  # 使用认证的数据库，通常是 admin
+        auth_source: parstarts  # 使用认证的数据库，通常是 admin
         server_selection_timeout: 5
         connect_timeout: 5
         socket_timeout: 5
