@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  require 'sidekiq/web'
+
   namespace :api do
     namespace :v1 do
       # 平台
@@ -25,6 +27,9 @@ Rails.application.routes.draw do
         resources :payments, only: [:create] do
           post :notify, on: :collection
         end
+        resources :conversations, only: [:index, :create, :show]
+        resources :transactions, only: [:index]
+        get 'info', to: 'users#info'
 
       end
       # post 'users/', to: 'users/verification_codes#create'
@@ -55,5 +60,6 @@ Rails.application.routes.draw do
   end
   
   mount ActionCable.server => "/cable" 
+  mount Sidekiq::Web => '/admin/sidekiq'
 
 end

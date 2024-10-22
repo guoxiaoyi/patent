@@ -31,6 +31,6 @@ module Api
           total_count: object.total_count
         }
       end
-    end    
+    end
   end
 end

@@ -51,6 +51,6 @@ module Deductible
   end
 
   def valid_resource_packs_sum
-    resource_packs.where("valid_to > ?", Time.current).sum(:amount)
+    resource_packs.available.sum(:amount)
   end
 end

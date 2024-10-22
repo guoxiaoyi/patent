@@ -14,6 +14,19 @@ zh:
         discount: "折扣"
         amount: "星币数量"
         valid_days: "有效天数"
+      resource_pack:
+        status:
+          active: "有效中"
+          expired: "已过期"
+          empty: "已用完"
+          never: "永久有效"
+          
+      transaction:
+        transaction_type:
+          deduct: "扣费"
+          recharge: "充值"
+          resource_pack_purchase: "资源包"
+          gift: "赠送"
     errors:
       models:
         tenant:

@@ -13,12 +13,14 @@ tenant = Tenant.create!(
   name: "Example Tenant",
   subdomain: "example",
   domain: "localhost",
+  billing_mode: 1
 )
 User.create!(
   phone: "13942615730",
   password: "password",
   password_confirmation: "password",
-  tenant: tenant
+  tenant: tenant,
+  balance: 1000
 )
 
 ResourcePackType.create!(
@@ -26,13 +28,26 @@ ResourcePackType.create!(
   price: 10.00,
   discount: 0.01,
   amount: 100,
-  valid_days: 30
+  bonus: 50,
+  valid_days: 1
 )
 RechargeType.create!(
   name: "10元",
   price: 10.00,
   discount: 0.01,
   amount: 100
+)
+Feature.create!(
+  name: "10元",
+  feature_key: 'innovate',
+  prompt: '语言：中文. 你是一名擅长使用TRIZ方法论来发掘专利创新点的发明家。你会从矛盾分析、系统分析、资源分析、功能分析、物质场分析。下面，我将说明我的需求，你要通过TRIZ方法为我挖掘数量多，而且又可行性的创新点。并对每种创新点提供详细一点的方案说明。',
+  cost: 1
+)
+
+Project.create!(
+  name: 'test',
+  tenant: Tenant.first,
+  user: User.first
 )
 
 # ResourcePackType.create!(

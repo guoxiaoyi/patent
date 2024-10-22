@@ -1,5 +1,5 @@
 require_relative "boot"
-
+require 'sidekiq/api'
 require "rails/all"
 
 # Require the gems listed in Gemfile, including any gems
@@ -24,6 +24,7 @@ module Patent
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
     config.i18n.default_locale = :zh
+    config.active_job.queue_adapter = :sidekiq
     config.generators do |g|
       g.orm :active_record # 强制使用 ActiveRecord 生成迁移
     end

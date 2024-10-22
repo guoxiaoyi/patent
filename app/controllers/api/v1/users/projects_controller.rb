@@ -4,7 +4,8 @@ module Api
       before_action :authenticate_user!
       before_action :find_project, only: [:update, :destroy]
       def index
-        @projects = @current_user.projects.page(params[:page]).per(params[:per_page] || 10)
+        @q = @current_user.projects.ransack(params[:q])
+        @projects = @q.result.page(params[:page]).per(params[:per_page] || 10)
         render :index, formats: :json
       end
 
@@ -36,7 +37,7 @@ module Api
       private
 
       def project_params
-        params.require(:project).permit(:name, :customer_id)
+        params.require(:project).permit(:name, :customer_id, :created_at)
       end
 
       def find_project

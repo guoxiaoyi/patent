@@ -36,6 +36,17 @@ gem 'acts_as_paranoid'
 # mongoDB
 gem 'mongoid', '~> 7.0'
 
+# 异步任务
+gem 'sidekiq'
+gem 'redis'
+# 定时任务
+gem 'whenever', require: false
+# 搜索功能
+gem 'ransack'
+
+gem 'pandoc-ruby'
+gem 'docx'
+
 gem 'rails-erd'
 
 # Use Redis adapter to run Action Cable in production

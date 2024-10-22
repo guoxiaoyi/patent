@@ -10,7 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_13_144422) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_17_081337) do
+  create_table "conversations", id: { type: :string, limit: 36 }, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "title"
+    t.bigint "user_id", null: false
+    t.bigint "feature_id", null: false
+    t.bigint "tenant_id", null: false
+    t.boolean "processing", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["feature_id"], name: "index_conversations_on_feature_id"
+    t.index ["tenant_id"], name: "index_conversations_on_tenant_id"
+    t.index ["user_id"], name: "index_conversations_on_user_id"
+  end
+
   create_table "customers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.bigint "tenant_id", null: false
@@ -22,6 +35,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_13_144422) do
   create_table "features", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.string "feature_key"
+    t.text "prompt"
     t.integer "cost"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -106,6 +120,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_13_144422) do
     t.decimal "price", precision: 10, scale: 2
     t.decimal "discount", precision: 10, scale: 2
     t.integer "amount"
+    t.integer "bonus", default: 0
     t.integer "valid_days"
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
@@ -207,6 +222,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_13_144422) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "conversations", "features"
+  add_foreign_key "conversations", "tenants"
+  add_foreign_key "conversations", "users"
   add_foreign_key "customers", "tenants"
   add_foreign_key "payments", "tenants"
   add_foreign_key "payments", "users"

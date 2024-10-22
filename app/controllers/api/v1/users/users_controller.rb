@@ -1,6 +1,11 @@
 module Api
   module V1
     class Users::UsersController < ApplicationController
+      before_action :authenticate_user!
+      def info
+        # render_json(data: @current_user)
+        render :info, formats: :json
+      end
       def recharge
         # 处理用户充值逻辑
       end

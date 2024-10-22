@@ -31,17 +31,17 @@ module Rechargeable
   def purchase_resource_pack(resource_pack_type)
     resource_pack = resource_packs.create(
       resource_pack_type: resource_pack_type,
-      amount: resource_pack_type.amount,
+      amount: resource_pack_type.amount + resource_pack_type.bonus,
       valid_from: Time.current,
       valid_to: Time.current + resource_pack_type.valid_days.days
     )
 
     Transaction.create(
       account: self,
-      amount: resource_pack_type.amount,
+      amount: resource_pack.amount,
       transaction_type: :resource_pack_purchase,
       transactionable: resource_pack,
-      description: "够买资源包: #{resource_pack_type.name}"
+      description: "#{resource_pack_type.price}元/#{resource_pack_type.amount}+#{resource_pack_type.bonus}星币"
     )
   end
 
@@ -52,7 +52,7 @@ module Rechargeable
       amount: recharge_type.amount,
       transaction_type: :recharge,
       transactionable: recharge_type,
-      description: "充值 #{recharge_type.amount} 星币"
+      description: "#{recharge_type.price}元"
     )
     update(balance: balance + recharge_type.amount)
     txn
