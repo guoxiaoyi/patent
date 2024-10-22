@@ -42,3 +42,4 @@ class Feature < ApplicationRecord
   end
 
 end
+
