@@ -11,8 +11,8 @@ TenantManager.create(phone: 13942615730)
 tenant = Tenant.create!(
   phone: '13942615730',
   name: "Example Tenant",
-  subdomain: "example",
-  domain: "localhost",
+  subdomain: "",
+  domain: "patstarts",
   billing_mode: 1
 )
 User.create!(
