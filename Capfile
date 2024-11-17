@@ -39,6 +39,9 @@ require 'capistrano/puma'
 require 'capistrano/puma/nginx'
 require 'capistrano/puma/systemd'
 
+require 'capistrano/sidekiq'
+require 'capistrano/sidekiq/systemd' # 使用 systemd 管理
+
 install_plugin Capistrano::Puma  # Default puma tasks
 install_plugin Capistrano::Puma::Systemd
 
