@@ -19,6 +19,6 @@ def insert_markdown_to_word(markdown_content, word_template_path, output_path, p
   doc.save(output_path)
 end
 
-# 示例调用
-markdown_content = "# 这是一个标题\n\n这是一些内容。"
-insert_markdown_to_word(markdown_content, 'template.docx', 'output.docx', '{{CONTENT_PLACEHOLDER}}')
+# # 示例调用
+# markdown_content = "# 这是一个标题\n\n这是一些内容。"
+# insert_markdown_to_word(markdown_content, 'template.docx', 'output.docx', '{{CONTENT_PLACEHOLDER}}')
