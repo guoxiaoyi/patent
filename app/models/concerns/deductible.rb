@@ -9,7 +9,7 @@ module Deductible
   end
   def deduct_amount(transactionable)
     ActiveRecord::Base.transaction do
-      remaining_amount = transactionable.cost
+      remaining_amount = transactionable.feature.cost
 
       # 优先使用资源包余额，按过期时间排序
       resource_packs.order(:valid_to).each do |resource_pack|
@@ -45,8 +45,8 @@ module Deductible
       account: self,
       amount: amount,
       transaction_type: :deduct,
-      transactionable: transactionable,
-      description: "Used feature #{transactionable.name} from #{source.class.name}"
+      transactionable: source,
+      description: "使用 #{transactionable.feature.name}, #{transactionable.title}"
     )
   end
 

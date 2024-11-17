@@ -10,16 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_17_081337) do
-  create_table "conversations", id: { type: :string, limit: 36 }, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+ActiveRecord::Schema[7.0].define(version: 2024_10_23_040828) do
+  create_table "conversation_steps", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "conversation_id", null: false
+    t.bigint "sub_feature_id", null: false
+    t.integer "status"
+    t.text "error_message"
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["conversation_id"], name: "index_conversation_steps_on_conversation_id"
+    t.index ["deleted_at"], name: "index_conversation_steps_on_deleted_at"
+    t.index ["sub_feature_id"], name: "index_conversation_steps_on_sub_feature_id"
+  end
+
+  create_table "conversations", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "request_id", limit: 36, null: false
     t.string "title"
     t.bigint "user_id", null: false
     t.bigint "feature_id", null: false
     t.bigint "tenant_id", null: false
+    t.bigint "project_id", null: false
     t.boolean "processing", default: false
+    t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["deleted_at"], name: "index_conversations_on_deleted_at"
     t.index ["feature_id"], name: "index_conversations_on_feature_id"
+    t.index ["project_id"], name: "index_conversations_on_project_id"
+    t.index ["request_id"], name: "index_conversations_on_request_id", unique: true
     t.index ["tenant_id"], name: "index_conversations_on_tenant_id"
     t.index ["user_id"], name: "index_conversations_on_user_id"
   end
@@ -34,7 +53,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_17_081337) do
 
   create_table "features", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
-    t.string "feature_key"
+    t.integer "feature_key"
     t.text "prompt"
     t.integer "cost"
     t.datetime "created_at", null: false
@@ -93,9 +112,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_17_081337) do
     t.decimal "price", precision: 10, scale: 2
     t.decimal "discount", precision: 10, scale: 2
     t.integer "amount"
+    t.json "rules"
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["deleted_at"], name: "index_recharge_types_on_deleted_at"
   end
 
   create_table "resource_pack_types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -105,6 +126,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_17_081337) do
     t.integer "amount"
     t.integer "bonus", default: 0
     t.integer "valid_days"
+    t.json "rules"
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -123,6 +145,17 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_17_081337) do
     t.datetime "updated_at", null: false
     t.index ["owner_type", "owner_id"], name: "index_resource_packs_on_owner"
     t.index ["resource_pack_type_id"], name: "index_resource_packs_on_resource_pack_type_id"
+  end
+
+  create_table "sub_features", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.text "prompt"
+    t.integer "feature_key"
+    t.integer "sort_order"
+    t.bigint "feature_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["feature_id"], name: "index_sub_features_on_feature_id"
   end
 
   create_table "tenant_managers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -205,7 +238,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_17_081337) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "conversation_steps", "conversations"
+  add_foreign_key "conversation_steps", "sub_features"
   add_foreign_key "conversations", "features"
+  add_foreign_key "conversations", "projects"
   add_foreign_key "conversations", "tenants"
   add_foreign_key "conversations", "users"
   add_foreign_key "customers", "tenants"
@@ -215,5 +251,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_17_081337) do
   add_foreign_key "projects", "tenants"
   add_foreign_key "projects", "users"
   add_foreign_key "resource_packs", "resource_pack_types"
+  add_foreign_key "sub_features", "features"
   add_foreign_key "users", "tenants"
 end

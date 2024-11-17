@@ -5,9 +5,12 @@ class CreateRechargeTypes < ActiveRecord::Migration[7.0]
       t.decimal :price, precision: 10, scale: 2
       t.decimal :discount, precision: 10, scale: 2
       t.integer :amount
+      t.json :rules
+      
       t.datetime :deleted_at
-
       t.timestamps
     end
+
+    add_index :recharge_types, :deleted_at
   end
 end

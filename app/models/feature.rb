@@ -1,5 +1,20 @@
 class Feature < ApplicationRecord
   has_many :transactions, as: :transactionable, dependent: :destroy
+  has_many :conversations
+  has_many :sub_features, dependent: :destroy
+  accepts_nested_attributes_for :sub_features, allow_destroy: true
+
+  enum feature_key: { innovate: 0, write_application: 1 }
+  # Feature keys:
+  # - innovate: 挖掘创新点
+  # - write_application: 撰写申请书
+  #   -> patent_title                   标题
+  #   -> technical_field                技术领域
+  #   -> background_art                 技术背景
+  #   -> claims                         权利要求书
+  #   -> abstract                       摘要
+  #   -> invention_summary              发明内容
+  #   -> detailed_description           具体实施方式
 
   def use(conversation)
     method_name = "#{feature_key}_logic"  # 动态生成方法名
@@ -10,20 +25,15 @@ class Feature < ApplicationRecord
     end
   end
 
-
-  # 各种不同的业务逻辑方法
+  # 挖掘创新点
   def innovate_logic(conversation)
-    input = {
-      messages: [
-        { role: 'system', content: prompt },
-        { role: 'user', content: conversation.title }
-      ]
-    }
-    Tongyi.server(input)
+    InnovateConversationJob.perform_later(conversation, conversation.user)
   end
 
-  def create_idea_logic(conversation)
-    "This is the create_idea logic."
+  # 撰写申请书
+  def write_application_logic(conversation)
+    conversation.update!(processing: true)
+    conversation.dispatch_pending_steps
   end
 
   def analyze_system_logic(conversation)
@@ -32,14 +42,7 @@ class Feature < ApplicationRecord
 
   # 当 feature_key 对应的方法不存在时调用
   def default_logic(conversation)
-    input = {
-      messages: [
-        { role: 'system', content: prompt },
-        { role: 'user', content: conversation.title }
-      ]
-    }
-    Tongyi.server(input)
+    Rails.logger.warn("No logic defined for feature_key: #{feature_key}")
   end
 
 end
-

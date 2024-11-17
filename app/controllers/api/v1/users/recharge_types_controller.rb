@@ -3,7 +3,8 @@ module Api
     class Users::RechargeTypesController < ApplicationController
       before_action :authenticate_user!
       def index
-        @recharge_types = RechargeType.all
+        @recharge_types = RechargeType.available_to_user(current_user)
+
         render_json(data: @recharge_types)
       end
     end

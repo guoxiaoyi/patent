@@ -121,7 +121,7 @@
 * [ ] SEO
 * [ ] 帮助文档
 * [X] 备案号
-* [ ] 发掘创新点
+* [X] 发掘创新点
 * [ ] 撰写申请书
  * [ ] 充值活动
     * [ ] 新用户首次充值 送优惠 0.01 N币 注册15天内
@@ -129,3 +129,16 @@
 * [ ] 论坛注册账号
 * [ ] 微信
 * [ ] 电话
+
+-----------------------
+* [X] 创建conversation时，同步创建steps, 即feature中的sub_features
+* [X] 然后fueature.use(conversation)时， 根据不同的feature_key， 调用不同的方法
+* [X] 挖掘创新点
+* [X] 撰写申请书实现到按sub_features中的排序，放到sidekiq中
+  >* [X] 对接ai, 像前端推送
+  >* [X] 任务完成钩子（决定之后将哪个任务添加到sidekiq）
+  >* [X] message 中feature_key 字段 用来区分不同的任务， 但feature 与 sub_feature中的 feature_key 冲突， 需要处理下
+* [X] conversation 增加了 project字段，前端需要将project id 传过来
+* ~~[ ] 修改撰写申请书~~
+* [ ] 申请书生成文档
+* [ ] 交易记录关联conversation表

@@ -27,7 +27,11 @@ Rails.application.routes.draw do
         resources :payments, only: [:create] do
           post :notify, on: :collection
         end
-        resources :conversations, only: [:index, :create, :show]
+        resources :conversations, only: [:index, :create, :show] do
+          member do
+            get :generate_document
+          end
+        end
         resources :transactions, only: [:index]
         get 'info', to: 'users#info'
 
@@ -59,7 +63,7 @@ Rails.application.routes.draw do
     end
   end
   
-  mount ActionCable.server => "/cable" 
+  mount ActionCable.server => "/cable"
   mount Sidekiq::Web => '/admin/sidekiq'
 
 end

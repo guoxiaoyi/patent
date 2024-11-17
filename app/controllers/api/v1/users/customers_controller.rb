@@ -8,11 +8,11 @@ module Api
 
       def create
         @customer = current_tenant.customers.build(customer_params)
-          if @customer.save
-            render_json(data: @customer)
-          else
-            render_json(data: @customer.errors, status: :unprocessable_entity)
-          end
+        if @customer.save
+          render_json(data: @customer)
+        else
+          render_json(data: @customer.errors, status: :unprocessable_entity)
+        end
       end
 
       private

@@ -6,7 +6,7 @@ class ChatChannel < ApplicationCable::Channel
   def unsubscribed
     # Any cleanup needed when channel is unsubscribed
   end
-  def connected
+  def connect
     console.log("Connected to Actioncable")
   end
 

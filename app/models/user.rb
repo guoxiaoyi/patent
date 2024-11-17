@@ -25,12 +25,11 @@ class User < ApplicationRecord
     target = tenant.shared? ? tenant : self
     # 检查用户的余额是否足够支付功能的费用
     if target.sufficient_balance?(conversation.feature.cost) 
-      target.deduct_amount(conversation.feature)         # 扣费
-      result = conversation.feature.use(conversation)    # 调用 feature 中的 use 方法，执行特定的业务逻辑      
-      result                                             # 根据业务逻辑处理结果，可以执行后续操作或返回结果
+      target.deduct_amount(conversation)                # 扣费
+      return true                                       # 根据业务逻辑处理结果，可以执行后续操作或返回结果
     else
-      errors.add(:base, "Insufficient balance to use feature #{feature.name}")
-      false
+      # errors.add(:base, "Insufficient balance to use feature #{feature.name}")
+      return false
     end
   end
 end

@@ -1,22 +1,21 @@
-class ProcessConversationJob < ApplicationJob
+class InnovateConversationJob < ApplicationJob
   queue_as :default
 
-  def perform(conversation_id, user_id)
-    user = User.find(user_id)
-    conversation = user.conversations.find(conversation_id)
-
+  def perform(conversation, user)
     # 确保任务只执行一次，防止重复执行
     return if conversation.processing?
 
     # 设置 conversation 为 processing
     conversation.update!(processing: true)
 
-    tongyi = user.use_feature(conversation)
 
-    unless tongyi
-      conversation.update!(processing: false)
-      return
-    end
+    input = {
+      messages: [
+        { role: 'system', content: conversation.feature.prompt },
+        { role: 'user', content: conversation.title }
+      ]
+    }
+    tongyi = Tongyi.server(input)
 
     parser = EventStreamParser::Parser.new
     cumulative_message = ''
@@ -51,7 +50,7 @@ class ProcessConversationJob < ApplicationJob
               request_id = parsed_data["request_id"] || request_id
 
               # 广播消息到前端
-              ActionCable.server.broadcast("idea_channel_#{conversation.id}", { message: message_chunk })
+              ActionCable.server.broadcast("conversation_channel_#{conversation.request_id}", { message: message_chunk })
 
               # 每次解析出内容时，逐步更新 message 记录
               message.update!(

@@ -45,7 +45,9 @@ gem 'whenever', require: false
 gem 'ransack'
 
 gem 'pandoc-ruby'
+gem 'docx_templater'
 gem 'docx'
+
 
 gem 'rails-erd'
 
@@ -84,4 +86,3 @@ group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
 end
-

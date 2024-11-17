@@ -7,8 +7,9 @@ class CreateResourcePackTypes < ActiveRecord::Migration[7.0]
       t.integer :amount
       t.integer :bonus, default: 0
       t.integer :valid_days
+      t.json :rules
+      
       t.datetime :deleted_at
-
       t.timestamps
     end
     add_index :resource_pack_types, :deleted_at

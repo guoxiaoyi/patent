@@ -34,6 +34,6 @@ class Api::V1::TenantManagers::RechargeTypesController < Api::V1::TenantManagers
     @recharge_type = RechargeType.with_deleted.find(params[:id])
   end
   def recharge_type_params
-    params.require(:recharge_type).permit(:name, :price, :discount, :amount)
+    params.require(:recharge_type).permit(:name, :price, :discount, :amount, rules: [] )
   end
 end
