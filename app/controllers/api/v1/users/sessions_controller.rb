@@ -20,7 +20,7 @@ module Api
 
           if user.nil?
             # 创建新用户
-            user = User.create(phone: params[:user][:phone], password: SecureRandom.hex(8)， tenant: current_tenant )
+            user = User.create(phone: params[:user][:phone], password: SecureRandom.hex(8), tenant: current_tenant )
           end
 
           # 销毁验证码
