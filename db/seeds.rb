@@ -71,7 +71,7 @@ Feature.find_by(feature_key: 'write_application').sub_features.create([
     - 第3段说出现有专利方案的不足，然后引出我的专利优势和带来了哪些效益。
     我的内容描述如下：
   ' },
-  { feature_key: :claims, name: '权利要求书', sort_order: 3, prompt: '
+  { feature_key: :claims, name: '权利要求书', sort_order: 4, prompt: '
     语言：中文
     你是一名资深专利代理师。现在需要你根据我提供的内容描述，按照专利申请书的规范要求，生成“权利要求”部分内容。
     # 权利要求
@@ -101,7 +101,7 @@ Feature.find_by(feature_key: 'write_application').sub_features.create([
     - 从属权利要求应按规定格式撰写,即“根据权利要求(引用的权利要求的编号)所述的(主题名称),其特征是……”。
     我的内容描述如下：
   ' },
-  { feature_key: :abstract, name: '摘要', sort_order: 4, prompt: '
+  { feature_key: :abstract, name: '摘要', sort_order: 5, prompt: '
     语言：中文
     你是一名资深专利代理师。现在需要你根据我提供的内容描述，按照专利申请书的规范要求，生成“摘要”部分内容。
     摘要
@@ -113,8 +113,8 @@ Feature.find_by(feature_key: 'write_application').sub_features.create([
 
     我的内容描述如下：
   ' },
-  { feature_key: :invention_summary, name: '发明内容', sort_order: 4 },
-  { feature_key: :detailed_description, name: '具体实施方式', sort_order: 6, prompt: '
+  { feature_key: :invention_summary, name: '发明内容', sort_order: 5 },
+  { feature_key: :detailed_description, name: '具体实施方式', sort_order: 5, prompt: '
     语言：中文
     你是一名资深专利代理师。现在需要你根据我提供的内容描述，按照专利申请书的规范要求，生成“实施例”部分内容。
     # 实施例
