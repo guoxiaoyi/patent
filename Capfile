@@ -32,18 +32,21 @@ require 'capistrano/rvm'
 require 'capistrano/bundler'
 require 'capistrano/rails'
 require 'capistrano/rails/migrations'
+
 require 'capistrano/puma'
+require 'capistrano/puma/systemd'
 # require 'capistrano/puma/workers'
 # require 'capistrano/puma/monit'
 # require 'capistrano/puma/jungle'
 require 'capistrano/puma/nginx'
-require 'capistrano/puma/systemd'
+install_plugin Capistrano::Puma  # Default puma tasks
+install_plugin Capistrano::Puma::Systemd
 
 require 'capistrano/sidekiq'
 require 'capistrano/sidekiq/systemd' # 使用 systemd 管理
+install_plugin Capistrano::Sidekiq
+install_plugin Capistrano::Sidekiq::Systemd
 
-install_plugin Capistrano::Puma  # Default puma tasks
-install_plugin Capistrano::Puma::Systemd
 
 
 # Load custom tasks from `lib/capistrano/tasks` if you have any defined

@@ -34,6 +34,6 @@ class Api::V1::TenantManagers::ResourcePackTypesController < Api::V1::TenantMana
     @resource_pack_type = ResourcePackType.with_deleted.find(params[:id])
   end
   def resource_pack_type_params
-    params.require(:resource_pack_type).permit(:name, :price, :bonus, :discount, :amount, :valid_days)
+    params.require(:resource_pack_type).permit(:name, :price, :bonus, :discount, :amount, :valid_days, rules: [])
   end
 end

@@ -59,6 +59,7 @@ Rails.application.routes.draw do
         resources :resource_pack_types, only: [:index, :create, :destroy]
         resources :transactions, only: [:index]
         resources :dashboard, only: [:index]
+        resources :features, only: [:index]
       end
     end
   end

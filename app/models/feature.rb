@@ -16,6 +16,26 @@ class Feature < ApplicationRecord
   #   -> invention_summary              发明内容
   #   -> detailed_description           具体实施方式
 
+
+  # 返回树状结构
+  def self.to_tree
+    all.includes(:sub_features).map do |feature|
+      {
+        id: feature.id,
+        name: feature.feature_key,
+        prompt: feature.prompt,
+        sub_features: feature.sub_features.map do |sub_feature|
+          { 
+            id: sub_feature.id,
+            name: sub_feature.feature_key,
+            order: sub_feature.sort_order,
+            prompt: sub_feature.prompt
+          }
+        end
+      }
+    end
+  end
+
   def use(conversation)
     method_name = "#{feature_key}_logic"  # 动态生成方法名
     if respond_to?(method_name, true)     # 检查是否存在该方法
