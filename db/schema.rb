@@ -10,7 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_23_040828) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_26_145443) do
+  create_table "articles", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "title"
+    t.text "content"
+    t.string "author"
+    t.integer "status"
+    t.bigint "category_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_articles_on_category_id"
+  end
+
+  create_table "categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.string "slug"
+    t.integer "parent_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["parent_id"], name: "index_categories_on_parent_id"
+    t.index ["slug"], name: "index_categories_on_slug", unique: true
+  end
+
   create_table "conversation_steps", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "conversation_id", null: false
     t.bigint "sub_feature_id", null: false
@@ -238,6 +259,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_23_040828) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "articles", "categories"
   add_foreign_key "conversation_steps", "conversations"
   add_foreign_key "conversation_steps", "sub_features"
   add_foreign_key "conversations", "features"
