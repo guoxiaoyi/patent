@@ -8,6 +8,7 @@ class User < ApplicationRecord
   belongs_to :tenant
   has_many :projects
   has_many :conversations
+  has_many :customers
   has_many :payments, dependent: :destroy
   has_many :transactions, as: :account, dependent: :destroy
   # Include default devise modules. Others available are:

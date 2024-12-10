@@ -46,7 +46,7 @@ module Deductible
       amount: amount,
       transaction_type: :deduct,
       transactionable: source,
-      description: "使用 #{transactionable.feature.name}, #{transactionable.title}"
+      description: "在 #{transactionable.project.name} 中, 使用 #{transactionable.feature.name} 功能, 对话名称: #{transactionable.title}, #{ source.class.name === 'User' ? "账户余额: #{self.balance}星币" : "资源包余额: #{source.amount}星币" }"
     )
   end
 

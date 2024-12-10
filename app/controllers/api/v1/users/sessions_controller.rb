@@ -12,7 +12,7 @@ module Api
         # 验证密码
         if user&.valid_password?(params[:user][:password])
           token = generate_jwt_token(user)
-          render_json(message: 'Signed up successfully.', data: { token: token, user: user })
+          render_json(message: '登录成功', data: { token: token, user: user })
         
         # 验证验证码
         elsif VerificationCode.exists?(phone: params[:user][:phone], code: params[:user][:verification_code])
@@ -28,11 +28,11 @@ module Api
 
           # 生成 JWT Token
           token = generate_jwt_token(user)
-          render_json(message: 'Signed up successfully.', data: { token: token, user: user })
+          render_json(message: '登录成功.', data: { token: token, user: user })
 
         # 其他情况
         else
-          render json: { message: 'Invalid login credentials or verification code.' }, status: :unauthorized
+          render_json(message: '登录失败或验证码错误', status: :unauthorized)
         end
       end
 

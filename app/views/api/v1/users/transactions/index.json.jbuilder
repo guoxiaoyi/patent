@@ -14,7 +14,7 @@ json.message 'success'
 json.code 0
 
 json.data do
-  json.content @transactions do |transaction|
+  json.content @transactions.order(created_at: :desc) do |transaction|
     json.kind I18n.t("activerecord.attributes.transaction.transaction_type.#{transaction.transaction_type}")
     json.description transaction.description
     if transaction.payment.present?
@@ -34,9 +34,12 @@ json.data do
           json.text I18n.t("activerecord.attributes.resource_pack.status.never")
         end
       end
+    else
+      json.amount transaction.amount
+      json.source transaction.transactionable.class.name === 'User' ? '余额' : '资源包'
     end
     
-    json.created_at transaction.created_at.strftime('%Y-%m-%d %H:%M:%S')
+    json.created_at transaction.created_at.strftime('%Y-%m-%d %H:%M')
   end
 
   # 添加分页信息

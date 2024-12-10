@@ -15,14 +15,14 @@ module Api
         if @project.save
           render_json(data: @project)
         else
-          render_json(data: @project.errors, status: :unprocessable_entity)
+          render_json(message: '创建失败', status: :unprocessable_entity)
         end
       end
       def update
         if @project.update(project_params) 
           render_json(data: @project)
         else
-          render_json(data: @project, status: :unprocessable_entity)
+          render_json(data: '更新失败', status: :unprocessable_entity)
         end
       end
 

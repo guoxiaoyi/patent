@@ -18,7 +18,7 @@ module Api
         if @conversation.save
           render_json(data: @conversation.request_id)
         else
-          render_json(data: @conversation.errors, status: :unprocessable_entity)
+          render_json(message: '余额不足,请充值', status: :unprocessable_entity)
         end
       end
 

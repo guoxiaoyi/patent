@@ -7,15 +7,15 @@ module Api
       def create
         verification_code = VerificationCode.find_by(phone: sign_up_params[:phone], code: params[:user][:verification_code])
         if verification_code.nil?
-          render json: { errors: ['Invalid verification code'] }, status: :unprocessable_entity
+          render_json(message: '验证码错误', status: :unprocessable_entity)
         else
           build_resource(sign_up_params)
           resource.save
           if resource.persisted?
             verification_code.destroy
-            render json: { message: 'Signed up successfully.' }, status: :ok
+            render_json(message: '登录成功', status: :ok)
           else
-            render json: { errors: resource.errors.full_messages }, status: :unprocessable_entity
+            render_json(message: resource.errors.full_messages, status: :unprocessable_entity)
           end
         end
       end

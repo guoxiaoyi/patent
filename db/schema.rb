@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_26_145443) do
+ActiveRecord::Schema[7.0].define(version: 2024_12_08_153000) do
   create_table "articles", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title"
     t.text "content"
@@ -69,6 +69,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_26_145443) do
     t.bigint "tenant_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
     t.index ["tenant_id"], name: "index_customers_on_tenant_id"
   end
 
