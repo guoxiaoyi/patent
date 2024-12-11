@@ -5,8 +5,9 @@ module Api
       def create
         verification_code = VerificationCode.find_or_initialize_by(phone: params[:phone])
         verification_code.save
+        verification_code.send_sms
         # 在此处调用Twilio或其他服务发送验证码
-        render_json(message: '发送成功', data: verification_code.code )
+        render_json(message: '发送成功', data: nil )
       end
     end
   end
