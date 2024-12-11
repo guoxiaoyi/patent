@@ -18,7 +18,7 @@ Rake::Task["deploy:assets:precompile"].clear_actions
 set :assets_roles, []
 
 # 共享文件和目录
-append :linked_files, "config/database.yml", "config/master.key", "config/sidekiq.yml"
+append :linked_files, "config/database.yml", "config/master.key", "config/sidekiq.yml", "config/application.yml"
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", "vendor", "storage", "node_modules"
 
 # 保留最近的 5 个发布版本
