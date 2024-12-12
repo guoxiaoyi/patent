@@ -27,6 +27,7 @@ Rails.application.routes.draw do
         resources :payments, only: [:create] do
           post :notify, on: :collection
         end
+        resources :features, only: [:show]
         resources :conversations, only: [:index, :create, :show] do
           member do
             get :generate_document

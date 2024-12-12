@@ -40,7 +40,6 @@ class VerificationCode < ApplicationRecord
 
   private
 
-
   # 阿里云规范化签名方法
   def generate_signature(params, access_key_secret)
     # Step 1: 对参数排序并格式化为 key=value
