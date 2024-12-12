@@ -10,12 +10,8 @@ module Api
       private
 
       def set_feature
-        @feature = Feature.find_by(params[:feature_key])
+        @feature = Feature.find_by(feature_key: params[:id])
       end
-      def customer_params
-        params.require(:feature).permit(:feature_key)
-      end
-
     end
   end
 end
