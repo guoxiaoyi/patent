@@ -15,11 +15,12 @@ module Api
           output_sum = Message.where(:conversation_id.in => conversation_ids).sum(:output_tokens)
 
           {
-        phone: user.phone,
-        conversations_count: user.conversations.count,
-        input_tokens: input_sum,
-        output_tokens: output_sum,
-        total_tokens: input_sum + output_sum
+            phone: user.phone,
+            conversations_count: user.conversations.count,
+            input_tokens: input_sum,
+            output_tokens: output_sum,
+            total_tokens: input_sum + output_sum,
+            created_at: user.created_at
           }
         end.sort_by { |u| -u[sort_key.to_sym] }
 
