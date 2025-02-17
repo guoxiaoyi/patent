@@ -1,5 +1,5 @@
 class Api::V1::TenantManagers::TenantsController < Api::V1::TenantManagers::ApplicationController
-  before_action :find_tenant, only: [:show, :update, :destroy]
+  before_action :find_tenant, only: [:show, :update, :destroy, :users]
 
   respond_to :json
 
@@ -31,6 +31,30 @@ class Api::V1::TenantManagers::TenantsController < Api::V1::TenantManagers::Appl
     else
       render_json(message: @tenant.errors.full_messages.join(','), status: :unprocessable_entity, code: 1)
     end
+  end
+
+  def users
+    grouped_users = @tenant.users.group_by { |u| u.created_at.to_date }
+  
+    grouped_users.each do |date, users|
+      grouped_users[date] = users.map do |u|
+        user_conversations = u.conversations
+        conversations = user_conversations.map do |conversation|
+          input_tokens = Message.where(conversation_id: conversation.id, user_id: u.id).sum(:input_tokens)
+          output_tokens = Message.where(conversation_id: conversation.id, user_id: u.id).sum(:output_tokens)
+          
+          {
+            conversation_id: conversation.id,
+            input_tokens: input_tokens,
+            output_tokens: output_tokens
+          }
+        end
+  
+        u.attributes.merge("conversations" => conversations)
+      end
+    end
+    
+    render_json(message: nil, data: grouped_users.sort_by { |date, _| date }.reverse.to_h)
   end
 
   def destroy

@@ -55,7 +55,9 @@ Rails.application.routes.draw do
 
       namespace :tenant_managers do
         resource :user
-        resources :tenants
+        resources :tenants do
+          get 'users', on: :member
+        end
         resources :recharge_types, only: [:index, :create, :destroy]
         resources :resource_pack_types, only: [:index, :create, :destroy]
         resources :transactions, only: [:index]
