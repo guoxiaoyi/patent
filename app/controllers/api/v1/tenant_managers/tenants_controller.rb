@@ -5,8 +5,17 @@ class Api::V1::TenantManagers::TenantsController < Api::V1::TenantManagers::Appl
 
   def index
     @tenants = Tenant.all.page(params[:page]).per(params[:per_page] || 10)
+    tenants_with_user_count = @tenants.map do |tenant|
+      user_count = tenant.users.count
+      total_tokens = tenant.users.inject(0) do |sum, user|
+        sum + Message.where(user_id: user.id).sum(:input_tokens) +
+        Message.where(user_id: user.id).sum(:output_tokens)
+      end
+      tenant.attributes.merge("user_count" => user_count, "total_tokens" => total_tokens)
+    end
+
     render_json(message: nil, data: { 
-      content: @tenants,
+      content: tenants_with_user_count,
       pagination: pagination_meta(@tenants)
     })
   end
