@@ -9,7 +9,7 @@ module Api
         # Defaults to sorting by conversations_count if sort_by param is missing or invalid
         sort_key = valid_sort_keys.include?(sort_by) ? sort_by : 'conversations_count'
         
-        users_data = User.all.map do |user|
+        users_data = Tenant.last.users.map do |user|
           conversation_ids = user.conversations.pluck(:id)
           input_sum  = Message.where(:conversation_id.in => conversation_ids).sum(:input_tokens)
           output_sum = Message.where(:conversation_id.in => conversation_ids).sum(:output_tokens)
