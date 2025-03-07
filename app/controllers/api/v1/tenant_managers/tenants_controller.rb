@@ -53,7 +53,8 @@ class Api::V1::TenantManagers::TenantsController < Api::V1::TenantManagers::Appl
           output_tokens = Message.where(conversation_id: conversation.id, user_id: u.id).sum(:output_tokens)
           
           {
-            conversation_id: conversation.id,
+            id: conversation.id,
+            title: conversation.title,
             input_tokens: input_tokens,
             output_tokens: output_tokens
           }

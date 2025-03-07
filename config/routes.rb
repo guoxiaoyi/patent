@@ -58,6 +58,7 @@ Rails.application.routes.draw do
         resources :tenants do
           get 'users', on: :member
         end
+        resources :conversations
         resources :recharge_types, only: [:index, :create, :destroy]
         resources :resource_pack_types, only: [:index, :create, :destroy]
         resources :transactions, only: [:index]
