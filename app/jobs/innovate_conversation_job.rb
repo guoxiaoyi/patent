@@ -8,10 +8,10 @@ class InnovateConversationJob < ApplicationJob
     # 设置 conversation 为 processing
     conversation.update!(processing: true)
 
-
+    prompt = conversation.feature.prompt.gsub('${keywords}', conversation.metadata['keywords'])
     input = {
       messages: [
-        { role: 'system', content: conversation.feature.prompt },
+        { role: 'system', content: prompt },
         { role: 'user', content: conversation.title }
       ]
     }

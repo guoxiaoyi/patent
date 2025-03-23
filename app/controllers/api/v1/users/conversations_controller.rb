@@ -5,6 +5,7 @@ module Api
       before_action :find_conversation, only: [:show, :generate_document]
 
       def index
+        p Feature.feature_keys[params[:feature_id]]
         @q = @current_user.conversations.ransack(feature_feature_key_eq: Feature.feature_keys[params[:feature_id]])
         @conversations = @q.result.order(created_at: :desc)
 
@@ -12,12 +13,22 @@ module Api
       end
       def create
         feature = Feature.find_by(feature_key: conversation_params[:feature_id])
-        project = Project.find(params[:project_id])
-        @conversation = Conversation.new(title: conversation_params[:title], user: @current_user, tenant: @current_user.tenant, feature: feature, project: project)
+        
+        # 创建会话基本信息
+        @conversation = Conversation.new(
+          title: conversation_params[:title], 
+          user: @current_user, 
+          tenant: @current_user.tenant, 
+          feature: feature
+        )
+        
+        # 直接设置metadata
+        @conversation.metadata = conversation_params[:metadata] if conversation_params[:metadata].present?
 
         if @conversation.save
           render_json(data: @conversation.request_id)
         else
+          p @conversation.errors
           render_json(message: '余额不足,请充值', status: :unprocessable_entity)
         end
       end
@@ -58,7 +69,7 @@ module Api
         @conversation = @current_user.conversations.find_by(request_id: params[:id])
       end
       def conversation_params
-        params.require(:conversation).permit(:title, :project_id, :feature_id)
+        params.require(:conversation).permit(:title, :project_id, :feature_id, :keywords, :type, :question, metadata: {})
       end
     end
   end

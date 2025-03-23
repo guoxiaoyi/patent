@@ -7,7 +7,7 @@ class Conversation < ApplicationRecord
   belongs_to :user
   belongs_to :feature
   belongs_to :tenant
-  belongs_to :project
+  
 
   has_many :steps, class_name: 'ConversationStep', foreign_key: 'conversation_id', dependent: :destroy
 

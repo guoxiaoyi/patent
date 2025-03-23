@@ -12,7 +12,25 @@ module SubFeatures
       
       # 如果 step.sub_feature.prompt 存在且不为空，则添加 system 消息
       if step.sub_feature.prompt.present?
-        input[:messages] << { role: 'system', content: step.sub_feature.prompt }
+        # 获取初始prompt
+        prompt = conversation.feature.prompt
+        
+        # 安全地替换所有占位符
+        if conversation.metadata.present?
+          # 定义所有需要替换的占位符及其对应的值
+          replacements = {
+            '${kind}' => conversation.metadata['kind'],
+            '${problem}' => conversation.metadata['problem']
+            # 可以在这里添加更多替换项
+          }
+          
+          # 遍历并替换所有占位符
+          replacements.each do |placeholder, value|
+            prompt = prompt.gsub(placeholder, value.to_s) if value.present?
+          end
+        end
+
+        input[:messages] << { role: 'system', content: prompt }
       end
       
       # 始终添加 user 消息

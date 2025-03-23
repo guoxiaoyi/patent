@@ -6,5 +6,5 @@ class Project < ApplicationRecord
   belongs_to :tenant
   belongs_to :user
 
-  has_many :conversations, dependent: :destroy
+  # has_many :conversations, dependent: :destroy
 end

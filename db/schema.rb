@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_12_08_153000) do
+ActiveRecord::Schema[7.0].define(version: 2025_03_23_060302) do
   create_table "articles", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title"
     t.text "content"
@@ -47,15 +47,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_08_153000) do
 
   create_table "conversations", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "request_id", limit: 36, null: false
-    t.string "title"
+    t.string "title", default: "text"
     t.bigint "user_id", null: false
     t.bigint "feature_id", null: false
     t.bigint "tenant_id", null: false
-    t.bigint "project_id", null: false
+    t.bigint "project_id"
     t.boolean "processing", default: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.json "metadata"
     t.index ["deleted_at"], name: "index_conversations_on_deleted_at"
     t.index ["feature_id"], name: "index_conversations_on_feature_id"
     t.index ["project_id"], name: "index_conversations_on_project_id"
