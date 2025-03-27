@@ -2,6 +2,7 @@ json.code 0
 json.data do 
   json.status @status
   json.title @conversation.title
+  json.metadata @conversation.metadata
   json.steps @conversation.steps do |step|
     json.id step.id
     json.key step.sub_feature.feature_key

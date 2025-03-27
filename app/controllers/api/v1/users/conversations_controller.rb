@@ -5,7 +5,6 @@ module Api
       before_action :find_conversation, only: [:show, :generate_document]
 
       def index
-        p Feature.feature_keys[params[:feature_id]]
         @q = @current_user.conversations.ransack(feature_feature_key_eq: Feature.feature_keys[params[:feature_id]])
         @conversations = @q.result.order(created_at: :desc)
 
